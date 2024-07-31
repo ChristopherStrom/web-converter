@@ -9,6 +9,7 @@ const RootPage = () => {
   useEffect(() => {
     axios.get('/api/modules')
       .then(response => {
+        console.log("Modules fetched: ", response.data); // Debugging line
         const modules = response.data;
         setModules(modules);
 
