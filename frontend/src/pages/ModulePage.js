@@ -10,11 +10,13 @@ const ModulePage = () => {
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
+    console.log('File selected:', e.target.files[0]);
     setFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Form submitted');
     if (!file) {
       alert("Please select a file to upload.");
       return;
@@ -22,6 +24,7 @@ const ModulePage = () => {
     const formData = new FormData();
     formData.append('file', file);
     setLoading(true);
+    console.log('Starting file upload');
 
     try {
       const response = await axios.post(`/api/convert/${moduleId}`, formData, {
@@ -30,6 +33,7 @@ const ModulePage = () => {
           'Content-Type': 'multipart/form-data'
         }
       });
+      console.log('File upload successful');
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -42,6 +46,7 @@ const ModulePage = () => {
       console.error('Error uploading file:', error);
     } finally {
       setLoading(false);
+      console.log('File upload complete. Redirecting to root.');
       history.push('/');
     }
   };
@@ -59,6 +64,12 @@ const ModulePage = () => {
           )}
         </button>
       </form>
+      {loading && (
+        <div className="loader-container">
+          <Puff color="#00BFFF" height={24} width={24} />
+          <p>Processing...</p>
+        </div>
+      )}
     </div>
   );
 };
