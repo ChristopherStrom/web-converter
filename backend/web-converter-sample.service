@@ -1,0 +1,14 @@
+[Unit]
+Description=Gunicorn instance to serve web-converter
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/web-converter/backend
+Environment="PATH=/usr/bin:/home/ubuntu/web-converter/venv/bin"
+ExecStart=/home/ubuntu/web-converter/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 --timeout 
+ app:app
+
+[Install]
+WantedBy=multi-user.target
