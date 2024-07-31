@@ -8,14 +8,6 @@ MODULES = {
     'ai_to_png': {
         'module': 'modules.ai_to_png',
         'category': 'images'
-    },
-    'ai_to_jpeg': {
-        'module': 'modules.ai_to_jpeg',
-        'category': 'images'
-    },
-    'ai_to_svg': {
-        'module': 'modules.ai_to_svg',
-        'category': 'images'
     }
 }
 
