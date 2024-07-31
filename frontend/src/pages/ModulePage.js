@@ -60,7 +60,6 @@ const ModulePage = () => {
           {loading ? (
             <div className="loader-container">
               <Puff color="#00BFFF" height={24} width={24} />
-              <p>Processing...</p>
             </div>
           ) : (
             'Convert'
