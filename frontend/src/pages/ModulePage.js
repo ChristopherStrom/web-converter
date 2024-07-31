@@ -15,6 +15,10 @@ const ModulePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!file) {
+      alert("Please select a file to upload.");
+      return;
+    }
     const formData = new FormData();
     formData.append('file', file);
     setLoading(true);
