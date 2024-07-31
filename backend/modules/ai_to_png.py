@@ -28,6 +28,6 @@ def process(file):
 
         with zipfile.ZipFile(zip_path, 'w') as zipf:
             for png_file in png_files:
-                zipf.write(png_file, os.path.basename(png_file))
+                zipf.write(png_file, os.path.relpath(png_file, temp_dir))
 
         return send_file(zip_path, as_attachment=True, attachment_filename='converted_files.zip')
