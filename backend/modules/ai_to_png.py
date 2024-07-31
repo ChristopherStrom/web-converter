@@ -9,7 +9,9 @@ def convert_to_png(input_file, output_file):
     Convert AI file to PNG using Inkscape.
     """
     command = ['inkscape', '--export-type=png', input_file, '-o', output_file]
-    subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if result.returncode != 0:
+        print(f"Error converting {input_file} to PNG: {result.stderr}")
 
 def process(file):
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -24,6 +26,7 @@ def process(file):
                     if file_name.endswith('.ai'):
                         input_path = os.path.join(root, file_name)
                         output_path = os.path.splitext(input_path)[0] + '.png'
+                        print(f"Converting {input_path} to {output_path}")
                         convert_to_png(input_path, output_path)
                         png_files.append(output_path)
 
@@ -36,5 +39,6 @@ def process(file):
             input_path = os.path.join(temp_dir, file.filename)
             file.save(input_path)
             output_path = os.path.splitext(input_path)[0] + '.png'
+            print(f"Converting {input_path} to {output_path}")
             convert_to_png(input_path, output_path)
             return send_file(output_path, as_attachment=True, download_name=os.path.basename(output_path))
