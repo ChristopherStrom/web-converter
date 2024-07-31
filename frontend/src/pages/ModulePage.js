@@ -58,7 +58,10 @@ const ModulePage = () => {
         <input type="file" onChange={handleFileChange} />
         <button type="submit" disabled={loading}>
           {loading ? (
-            <Puff color="#00BFFF" height={24} width={24} />
+            <div className="loader-container">
+              <Puff color="#00BFFF" height={24} width={24} />
+              <p>Processing...</p>
+            </div>
           ) : (
             'Convert'
           )}
@@ -66,7 +69,7 @@ const ModulePage = () => {
       </form>
       {loading && (
         <div className="loader-container">
-          <Puff color="#00BFFF" height={24} width={24} />
+          <Puff color="#00BFFF" height={100} width={100} />
           <p>Processing...</p>
         </div>
       )}
