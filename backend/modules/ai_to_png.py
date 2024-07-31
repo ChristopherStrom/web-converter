@@ -6,7 +6,6 @@ from flask import jsonify, send_file
 from werkzeug.utils import secure_filename
 
 def process(file):
-    # Create a unique directory based on the datetime stamp
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     processing_dir = os.path.join(tempfile.gettempdir(), f"processing_{timestamp}")
     os.makedirs(processing_dir, exist_ok=True)
@@ -22,10 +21,11 @@ def process(file):
 
 def process_single_file(input_path, processing_dir):
     output_path = os.path.join(processing_dir, f"{os.path.splitext(os.path.basename(input_path))[0]}.png")
-    os.system(f"inkscape {input_path} --export-png={output_path}")
+    inkscape_command = f"inkscape {input_path} --export-png={output_path}"
+    os.system(inkscape_command)
 
     if not os.path.exists(output_path):
-        return jsonify({"error": "File conversion failed"}), 500
+        return jsonify({"error": f"File conversion failed. Command executed: {inkscape_command}"}), 500
 
     return send_file(output_path, as_attachment=True)
 
@@ -43,7 +43,11 @@ def process_zip(input_zip, processing_dir):
         for file in files:
             input_file = os.path.join(root, file)
             output_file = os.path.join(output_dir, f"{os.path.splitext(file)[0]}.png")
-            os.system(f"inkscape {input_file} --export-png={output_file}")
+            inkscape_command = f"inkscape {input_file} --export-png={output_file}"
+            os.system(inkscape_command)
+
+            if not os.path.exists(output_file):
+                return jsonify({"error": f"File conversion failed for {input_file}. Command executed: {inkscape_command}"}), 500
 
     output_zip = os.path.join(processing_dir, "converted_files.zip")
     with zipfile.ZipFile(output_zip, 'w') as zipf:
