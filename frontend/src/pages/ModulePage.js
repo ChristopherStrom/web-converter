@@ -11,6 +11,7 @@ const ModulePage = () => {
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    console.log('File selected:', e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -22,6 +23,7 @@ const ModulePage = () => {
     const formData = new FormData();
     formData.append('file', file);
     setLoading(true);
+    console.log('Form submitted. Starting file upload.');
 
     try {
       const response = await axios.post(`/api/convert/${moduleId}`, formData, {
@@ -30,6 +32,7 @@ const ModulePage = () => {
           'Content-Type': 'multipart/form-data'
         }
       });
+      console.log('File upload successful:', response);
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -42,6 +45,7 @@ const ModulePage = () => {
       console.error('Error uploading file:', error);
     } finally {
       setLoading(false);
+      console.log('File upload complete. Redirecting to root.');
       history.push('/');
     }
   };
