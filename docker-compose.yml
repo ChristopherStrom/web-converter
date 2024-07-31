@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  frontend:
+    image: node:14
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npm run build"
+    depends_on:
+      - backend
+
+  backend:
+    image: python:3.8
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    command: sh -c "pip install -r requirements.txt && gunicorn --bind 0.0.0.0:5000 app:app"
+    environment:
+      - FLASK_ENV=development
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./frontend/build:/usr/share/nginx/html
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
