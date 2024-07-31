@@ -12,7 +12,11 @@ def download_video(youtube_url, output_path):
     yt = YouTube(youtube_url)
     stream = yt.streams.filter(file_extension='mp4').first()
     stream.download(output_path=output_path, filename='video')
-    return os.path.join(output_path, 'video.mp4')
+    mp4_path = os.path.join(output_path, 'video.mp4')
+    # Explicitly rename the file to ensure it has the correct extension
+    if not os.path.exists(mp4_path):
+        os.rename(os.path.join(output_path, 'video'), mp4_path)
+    return mp4_path
 
 def convert_to_mp3(mp4_file, output_path):
     """
