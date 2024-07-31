@@ -38,10 +38,7 @@ def convert_file(module_id):
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
 
-    if file and zipfile.is_zipfile(file):
-        return module.process(file)
-    else:
-        return jsonify({"error": "Invalid file format, please upload a ZIP file"}), 400
+    return module.process(file)
 
 if __name__ == '__main__':
     app.run(debug=True)
