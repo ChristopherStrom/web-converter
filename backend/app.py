@@ -8,31 +8,35 @@ MODULES = {
         'module': 'modules.youtube_to_mp4',
         'category': 'videos',
         'input_type': 'url',
-        'file_type': 'mp4'
+        'file_type': 'mp4',
+        'returns_zip': False
     },
     'youtube_to_mp3': {
         'module': 'modules.youtube_to_mp3',
         'category': 'audio',
         'input_type': 'url',
-        'file_type': 'mp3'
+        'file_type': 'mp3',
+        'returns_zip': False
     },
     'ai_to_png': {
         'module': 'modules.ai_to_png',
         'category': 'images',
         'input_type': 'file',
-        'file_type': 'png'
+        'file_type': 'png',
+        'returns_zip': True
     },
     'ai_to_svg': {
         'module': 'modules.ai_to_svg',
         'category': 'images',
         'input_type': 'file',
-        'file_type': 'svg'
+        'file_type': 'svg',
+        'returns_zip': True
     }
 }
 
 @app.route('/api/modules', methods=['GET'])
 def list_modules():
-    return jsonify([{"id": k, "name": v['module'].split('.')[-1].replace('_', ' ').title(), "category": v['category'], "input_type": v['input_type'], "file_type": v['file_type']} for k, v in MODULES.items()])
+    return jsonify([{"id": k, "name": v['module'].split('.')[-1].replace('_', ' ').title(), "category": v['category'], "input_type": v['input_type'], "file_type": v['file_type'], "returns_zip": v['returns_zip']} for k, v in MODULES.items()])
 
 @app.route('/api/convert/<module_id>', methods=['POST'])
 def convert_file(module_id):
