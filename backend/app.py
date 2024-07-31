@@ -9,6 +9,11 @@ MODULES = {
         'category': 'videos',
         'input_type': 'url'
     },
+    'youtube_to_mp3': {
+        'module': 'modules.youtube_to_mp3',
+        'category': 'audio',
+        'input_type': 'url'
+    },
     'ai_to_png': {
         'module': 'modules.ai_to_png',
         'category': 'images',
