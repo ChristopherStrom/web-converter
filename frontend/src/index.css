@@ -48,16 +48,11 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+button:disabled {
+  background-color: #444;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
   background-color: #3700b3;
-}
-
-.loader-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.loader-container p {
-  margin-top: 10px;
 }
