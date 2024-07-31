@@ -10,5 +10,5 @@ sudo systemctl restart nginx
 Build Backend Flask app
 
 ```
-sudo systemctl restart web-convertor.service
+sudo systemctl restart web-converter.service
 ```
