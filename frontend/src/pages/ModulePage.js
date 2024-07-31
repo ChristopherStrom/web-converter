@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
-import { Puff } from 'react-loader-spinner';
 
 const ModulePage = () => {
   const { moduleId } = useParams();
@@ -57,21 +56,9 @@ const ModulePage = () => {
       <form onSubmit={handleSubmit}>
         <input type="file" onChange={handleFileChange} />
         <button type="submit" disabled={loading}>
-          {loading ? (
-            <div className="loader-container">
-              <Puff color="#00BFFF" height={24} width={24} />
-            </div>
-          ) : (
-            'Convert'
-          )}
+          {loading ? 'Processing...' : 'Convert'}
         </button>
       </form>
-      {loading && (
-        <div className="loader-container">
-          <Puff color="#00BFFF" height={100} width={100} />
-          <p>Processing...</p>
-        </div>
-      )}
     </div>
   );
 };
