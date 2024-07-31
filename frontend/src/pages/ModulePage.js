@@ -35,27 +35,30 @@ const ModulePage = () => {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData();
-    if (moduleInfo.input_type === 'file') {
-      if (!file) {
-        alert('Please select a file');
-        setLoading(false);
-        return;
-      }
-      formData.append('file', file);
-    } else if (moduleInfo.input_type === 'url') {
-      if (!url) {
-        alert('Please enter a URL');
-        setLoading(false);
-        return;
-      }
-      formData.append('url', url);
-    }
-
     try {
-      const response = await axios.post(`/api/convert/${moduleId}`, formData, {
-        responseType: 'blob'
-      });
+      let response;
+      if (moduleInfo.input_type === 'file') {
+        if (!file) {
+          alert('Please select a file');
+          setLoading(false);
+          return;
+        }
+        const formData = new FormData();
+        formData.append('file', file);
+        response = await axios.post(`/api/convert/${moduleId}`, formData, {
+          responseType: 'blob'
+        });
+      } else if (moduleInfo.input_type === 'url') {
+        if (!url) {
+          alert('Please enter a URL');
+          setLoading(false);
+          return;
+        }
+        response = await axios.post(`/api/convert/${moduleId}`, { url }, {
+          responseType: 'blob'
+        });
+      }
+
       const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = downloadUrl;
@@ -68,4 +71,26 @@ const ModulePage = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  if (!moduleInfo) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <h1>{moduleInfo.name}</h1>
+      <form onSubmit={handleSubmit}>
+        {moduleInfo.input_type === 'file' && (
+          <input type="file" onChange={handleFileChange} />
+        )}
+        {moduleInfo.input_type === 'url' && (
+          <input type="text" value={url} onChange={handleUrlChange} placeholder="Enter URL" />
+        )}
+        <button type="submit" disabled={loading}>
+          {loading ? 'Processing...' : 'Convert'}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default ModulePage;
