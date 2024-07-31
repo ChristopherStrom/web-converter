@@ -13,7 +13,7 @@ const ModulePage = () => {
     setFile(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) {
       alert("Please select a file to upload.");
@@ -23,13 +23,14 @@ const ModulePage = () => {
     formData.append('file', file);
     setLoading(true);
 
-    axios.post(`/api/convert/${moduleId}`, formData, {
-      responseType: 'blob',
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    .then(response => {
+    try {
+      const response = await axios.post(`/api/convert/${moduleId}`, formData, {
+        responseType: 'blob',
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -38,9 +39,11 @@ const ModulePage = () => {
       link.click();
       link.parentNode.removeChild(link);
       setResult("File converted successfully");
-    })
-    .catch(error => console.error('Error uploading file:', error))
-    .finally(() => setLoading(false));
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
