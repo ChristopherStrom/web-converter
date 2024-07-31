@@ -1,15 +1,16 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import importlib
+import zipfile
+import tempfile
+import os
 
 app = Flask(__name__)
 
-# Increase maximum upload size
-app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 20 MB
-
-# Configuration for available modules
 MODULES = {
-    "ai-to-png": {"module": "modules.ai_to_png", "category": "Images"},
-    "docx-to-pdf": {"module": "modules.docx_to_pdf", "category": "Documents"}
+    'ai_to_png': {
+        'module': 'modules.ai_to_png',
+        'category': 'images'
+    }
 }
 
 @app.route('/api/modules', methods=['GET'])
@@ -22,7 +23,19 @@ def convert_file(module_id):
         return jsonify({"error": "Module not found"}), 404
 
     module = importlib.import_module(MODULES[module_id]['module'])
-    return module.process(request.files['file'])
+
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    if file and zipfile.is_zipfile(file):
+        return module.process(file)
+    else:
+        return jsonify({"error": "Invalid file format, please upload a ZIP file"}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
