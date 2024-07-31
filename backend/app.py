@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import importlib
 
 app = Flask(__name__)
@@ -29,5 +29,18 @@ def convert_file(module_id):
 
     module = importlib.import_module(MODULES[module_id]['module'])
 
-    if 'url' in request.json:
-        url = request.json['
+    if 'file' in request.files:
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+        return module.process(file)
+    elif 'url' in request.json:
+        url = request.json['url']
+        if url == '':
+            return jsonify({"error": "No URL provided"}), 400
+        return module.process(url)
+    else:
+        return jsonify({"error": "No file or URL part"}), 400
+
+if __name__ == '__main__':
+    app.run(debug=True)
