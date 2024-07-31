@@ -5,10 +5,13 @@ from pytubefix import YouTube
 
 def download_video(youtube_url, output_path):
     """
-    Download YouTube video as MP4.
+    Download YouTube video as MP4 in the highest quality up to 1080p.
     """
     yt = YouTube(youtube_url)
-    stream = yt.streams.filter(file_extension='mp4').first()
+    # Get the highest resolution MP4 stream available, up to 1080p
+    stream = yt.streams.filter(file_extension='mp4', res="1080p").first()
+    if not stream:
+        stream = yt.streams.filter(file_extension='mp4').order_by('resolution').desc().first()
     stream.download(output_path=output_path)
 
 def process(url):
