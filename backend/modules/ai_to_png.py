@@ -21,7 +21,7 @@ def process(file):
 
 def process_single_file(input_path, processing_dir):
     output_path = os.path.join(processing_dir, f"{os.path.splitext(os.path.basename(input_path))[0]}.png")
-    inkscape_command = f"inkscape {input_path} --export-png={output_path}"
+    inkscape_command = f"inkscape {input_path} --export-filename={output_path}"
     os.system(inkscape_command)
 
     if not os.path.exists(output_path):
@@ -43,7 +43,7 @@ def process_zip(input_zip, processing_dir):
         for file in files:
             input_file = os.path.join(root, file)
             output_file = os.path.join(output_dir, f"{os.path.splitext(file)[0]}.png")
-            inkscape_command = f"inkscape {input_file} --export-png={output_file}"
+            inkscape_command = f"inkscape {input_file} --export-filename={output_file}"
             os.system(inkscape_command)
 
             if not os.path.exists(output_file):
