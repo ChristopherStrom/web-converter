@@ -12,8 +12,8 @@ def convert_to_png(input_file, output_file):
     subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def process(file):
-    if zipfile.is_zipfile(file):
-        with tempfile.TemporaryDirectory() as temp_dir:
+    with tempfile.TemporaryDirectory() as temp_dir:
+        if zipfile.is_zipfile(file):
             zip_path = os.path.join(temp_dir, 'converted_files.zip')
             with zipfile.ZipFile(file, 'r') as zip_ref:
                 zip_ref.extractall(temp_dir)
@@ -32,8 +32,7 @@ def process(file):
                     zipf.write(png_file, os.path.relpath(png_file, temp_dir))
 
             return send_file(zip_path, as_attachment=True, download_name='converted_files.zip')
-    else:
-        with tempfile.TemporaryDirectory() as temp_dir:
+        else:
             input_path = os.path.join(temp_dir, file.filename)
             file.save(input_path)
             output_path = os.path.splitext(input_path)[0] + '.png'
