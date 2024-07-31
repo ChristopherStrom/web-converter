@@ -38,11 +38,11 @@ const ModulePage = () => {
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
-      setLoading(false);
-      history.push('/');
     } catch (error) {
       console.error('Error uploading file:', error);
+    } finally {
       setLoading(false);
+      history.push('/');
     }
   };
 
