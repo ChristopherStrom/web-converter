@@ -5,6 +5,10 @@ import zipfile
 app = Flask(__name__)
 
 MODULES = {
+    'youtube_to_mp4': {
+        'module': 'modules.youtube_to_mp4',
+        'category': 'videos'
+    },
     'ai_to_png': {
         'module': 'modules.ai_to_png',
         'category': 'images'
