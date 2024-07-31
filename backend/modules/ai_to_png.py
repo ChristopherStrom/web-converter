@@ -2,7 +2,7 @@ import os
 import zipfile
 import tempfile
 import subprocess
-from flask import send_file
+from flask import send_file, jsonify
 
 def convert_to_png(input_file, output_file):
     """
