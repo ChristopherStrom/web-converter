@@ -4,7 +4,7 @@ import importlib
 app = Flask(__name__)
 
 # Increase maximum upload size
-app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 20 MB
+app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 20 MB
 
 # Configuration for available modules
 MODULES = {
