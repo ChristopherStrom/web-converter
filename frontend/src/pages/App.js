@@ -1,17 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import RootPage from './pages/RootPage';
-import ModulePage from './pages/ModulePage';
+import YoutubeToMp4Page from './pages/YoutubeToMp4Page';
+import OtherPages from './pages/OtherPages'; // Example of other page imports
 
-function App() {
-  return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={RootPage} />
-        <Route path="/convert/:moduleId" component={ModulePage} />
-      </Switch>
-    </Router>
-  );
-}
+const App = () => (
+  <Router>
+    <Switch>
+      <Route path="/youtube-to-mp4" component={YoutubeToMp4Page} />
+      {/* Other routes */}
+    </Switch>
+  </Router>
+);
 
 export default App;
