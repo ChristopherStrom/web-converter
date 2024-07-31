@@ -1,7 +1,7 @@
 import os
 import tempfile
 from flask import send_file, jsonify
-from pytube import YouTube
+from pytubefix import YouTube
 
 def download_video(youtube_url, output_path):
     """
