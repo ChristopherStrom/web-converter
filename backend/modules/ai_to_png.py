@@ -1,9 +1,21 @@
 import os
+import subprocess
 import zipfile
 import tempfile
 import datetime
 from flask import jsonify, send_file
 from werkzeug.utils import secure_filename
+
+def convert_to_png(input_file, output_file):
+    """
+    Convert AI file to png using Inkscape.
+    
+    Parameters:
+    - input_file: Path to the input AI file.
+    - output_file: Path to save the output png file.
+    """
+    command = ['inkscape', '--export-type=png', input_file, '-o', output_file]
+    subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def process(file):
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -21,8 +33,7 @@ def process(file):
 
 def process_single_file(input_path, processing_dir):
     output_path = os.path.join(processing_dir, f"{os.path.splitext(os.path.basename(input_path))[0]}.png")
-    inkscape_command = f"inkscape {input_path} --export-filename={output_path}"
-    os.system(inkscape_command)
+    convert_to_png(input_path, output_path)
 
     if not os.path.exists(output_path):
         return jsonify({"error": f"File conversion failed. Command executed: {inkscape_command}"}), 500
@@ -41,13 +52,13 @@ def process_zip(input_zip, processing_dir):
 
     for root, dirs, files in os.walk(extract_dir):
         for file in files:
-            input_file = os.path.join(root, file)
-            output_file = os.path.join(output_dir, f"{os.path.splitext(file)[0]}.png")
-            inkscape_command = f"inkscape {input_file} --export-filename={output_file}"
-            os.system(inkscape_command)
+            if file.endswith('.ai'):
+                input_file = os.path.join(root, file)
+                output_file = os.path.join(output_dir, f"{os.path.splitext(file)[0]}.png")
+                convert_to_png(input_file, output_file)
 
-            if not os.path.exists(output_file):
-                return jsonify({"error": f"File conversion failed for {input_file}. Command executed: {inkscape_command}"}), 500
+                if not os.path.exists(output_file):
+                    return jsonify({"error": f"File conversion failed for {input_file}"}), 500
 
     output_zip = os.path.join(processing_dir, "converted_files.zip")
     with zipfile.ZipFile(output_zip, 'w') as zipf:
