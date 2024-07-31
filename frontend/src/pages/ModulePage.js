@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import Loader from 'react-loader-spinner';
+import { Puff } from 'react-loader-spinner';
 
 const ModulePage = () => {
   const { moduleId } = useParams();
@@ -48,7 +48,7 @@ const ModulePage = () => {
       </form>
       {loading && (
         <div>
-          <Loader type="Puff" color="#00BFFF" height={100} width={100} />
+          <Puff color="#00BFFF" height={100} width={100} />
           <p>Processing...</p>
         </div>
       )}
