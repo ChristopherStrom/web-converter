@@ -79,4 +79,21 @@ const ModulePage = () => {
   return (
     <div className="module-container">
       <header className="module-header">
-        <h1>{moduleInfo.name
+        <h1>{moduleInfo.name}</h1>
+      </header>
+      <form className="module-form" onSubmit={handleSubmit}>
+        {moduleInfo.input_type === 'file' && (
+          <input type="file" onChange={handleFileChange} />
+        )}
+        {moduleInfo.input_type === 'url' && (
+          <input type="text" value={url} onChange={handleUrlChange} placeholder="Enter URL" />
+        )}
+        <button type="submit" disabled={loading}>
+          {loading ? 'Processing...' : 'Convert'}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default ModulePage;
