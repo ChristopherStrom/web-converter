@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
 
 const ModulePage = () => {
   const { moduleId } = useParams();
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -15,6 +17,7 @@ const ModulePage = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('file', file);
+    setLoading(true);
 
     axios.post(`/api/convert/${moduleId}`, formData, {
       responseType: 'blob',
@@ -32,7 +35,8 @@ const ModulePage = () => {
       link.parentNode.removeChild(link);
       setResult("File converted successfully");
     })
-    .catch(error => console.error('Error uploading file:', error));
+    .catch(error => console.error('Error uploading file:', error))
+    .finally(() => setLoading(false));
   };
 
   return (
@@ -42,6 +46,12 @@ const ModulePage = () => {
         <input type="file" onChange={handleFileChange} />
         <button type="submit">Convert</button>
       </form>
+      {loading && (
+        <div>
+          <Loader type="Puff" color="#00BFFF" height={100} width={100} />
+          <p>Processing...</p>
+        </div>
+      )}
       {result && <div>
         <h2>Conversion Result</h2>
         <p>{result}</p>
