@@ -30,4 +30,4 @@ def process(file):
             for png_file in png_files:
                 zipf.write(png_file, os.path.relpath(png_file, temp_dir))
 
-        return send_file(zip_path, as_attachment=True, attachment_filename='converted_files.zip')
+        return send_file(zip_path, as_attachment=True, download_name='converted_files.zip')
