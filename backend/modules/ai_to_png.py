@@ -37,4 +37,7 @@ def process(file):
             file.save(input_path)
             output_path = os.path.splitext(input_path)[0] + '.png'
             convert_to_png(input_path, output_path)
-            return send_file(output_path, as_attachment=True, download_name=os.path.basename(output_path))
+            if os.path.exists(output_path):
+                return send_file(output_path, as_attachment=True, download_name=os.path.basename(output_path))
+            else:
+                return jsonify({"error": "File conversion failed"}), 500
