@@ -17,11 +17,21 @@ const ModulePage = () => {
     formData.append('file', file);
 
     axios.post(`/api/convert/${moduleId}`, formData, {
+      responseType: 'blob',
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
-    .then(response => setResult(response.data))
+    .then(response => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', response.headers['content-disposition'].split('filename=')[1]);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      setResult("File converted successfully");
+    })
     .catch(error => console.error('Error uploading file:', error));
   };
 
@@ -34,8 +44,7 @@ const ModulePage = () => {
       </form>
       {result && <div>
         <h2>Conversion Result</h2>
-        <p>{result.message}</p>
-        {/* Display conversion result, e.g., a link to the converted file */}
+        <p>{result}</p>
       </div>}
     </div>
   );
