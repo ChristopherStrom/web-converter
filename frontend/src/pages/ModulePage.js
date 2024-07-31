@@ -62,7 +62,7 @@ const ModulePage = () => {
       const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.setAttribute('download', 'output.mp4');  // Adjust the file name and extension accordingly
+      link.setAttribute('download', moduleInfo.returns_zip ? 'converted_files.zip' : `output.${moduleInfo.file_type}`);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
