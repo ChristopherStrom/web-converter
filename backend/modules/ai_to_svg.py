@@ -9,7 +9,8 @@ def convert_to_svg(input_file, output_file):
     Convert AI file to SVG using Inkscape.
     """
     command = ['inkscape', '--export-type=svg', input_file, '-o', output_file]
-    subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(f"Converting {input_file} to SVG: {result.stdout}, {result.stderr}")
 
 def process(file):
     with tempfile.TemporaryDirectory() as temp_dir:
