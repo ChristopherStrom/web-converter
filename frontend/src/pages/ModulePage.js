@@ -38,11 +38,11 @@ const ModulePage = () => {
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    } finally {
       setLoading(false);
       history.push('/');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setLoading(false);
     }
   };
 
@@ -53,10 +53,7 @@ const ModulePage = () => {
         <input type="file" onChange={handleFileChange} />
         <button type="submit" disabled={loading}>
           {loading ? (
-            <div className="loader-container">
-              <Puff color="#00BFFF" height={24} width={24} />
-              <p>Processing...</p>
-            </div>
+            <Puff color="#00BFFF" height={24} width={24} />
           ) : (
             'Convert'
           )}
