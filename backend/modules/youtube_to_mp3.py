@@ -25,10 +25,17 @@ def convert_to_mp3(mp4_file, output_path):
 
 def process(url):
     os.makedirs(TEMP_DIR, exist_ok=True)
-    with tempfile.TemporaryDirectory(dir=TEMP_DIR) as temp_dir:
-        try:
-            mp4_file = download_video(url, temp_dir)
-            mp3_file = convert_to_mp3(mp4_file, temp_dir)
-            return send_file(mp3_file, as_attachment=True, download_name='audio.mp3')
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
+    temp_dir = tempfile.mkdtemp(dir=TEMP_DIR)
+    try:
+        mp4_file = download_video(url, temp_dir)
+        mp3_file = convert_to_mp3(mp4_file, temp_dir)
+        return send_file(mp3_file, as_attachment=True, download_name='audio.mp3')
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        for root, dirs, files in os.walk(temp_dir):
+            for file in files:
+                os.remove(os.path.join(root, file))
+            for dir in dirs:
+                os.rmdir(os.path.join(root, dir))
+        os.rmdir(temp_dir)
