@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import './ModulePage.css';
 
 const ModulePage = () => {
   const { moduleId } = useParams();
@@ -73,24 +74,9 @@ const ModulePage = () => {
     }
   };
 
-  if (!moduleInfo) return <div>Loading...</div>;
+  if (!moduleInfo) return <div className="loading">Loading...</div>;
 
   return (
-    <div>
-      <h1>{moduleInfo.name}</h1>
-      <form onSubmit={handleSubmit}>
-        {moduleInfo.input_type === 'file' && (
-          <input type="file" onChange={handleFileChange} />
-        )}
-        {moduleInfo.input_type === 'url' && (
-          <input type="text" value={url} onChange={handleUrlChange} placeholder="Enter URL" />
-        )}
-        <button type="submit" disabled={loading}>
-          {loading ? 'Processing...' : 'Convert'}
-        </button>
-      </form>
-    </div>
-  );
-};
-
-export default ModulePage;
+    <div className="module-container">
+      <header className="module-header">
+        <h1>{moduleInfo.name
