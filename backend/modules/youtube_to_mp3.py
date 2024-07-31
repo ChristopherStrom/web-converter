@@ -3,6 +3,8 @@ import tempfile
 from flask import send_file, jsonify
 from pytubefix import YouTube
 
+TEMP_DIR = '/home/ubuntu/web-converter/temp/'
+
 def download_video(youtube_url, output_path):
     """
     Download YouTube video as MP4.
@@ -22,7 +24,8 @@ def convert_to_mp3(mp4_file, output_path):
     return mp3_file
 
 def process(url):
-    with tempfile.TemporaryDirectory() as temp_dir:
+    os.makedirs(TEMP_DIR, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=TEMP_DIR) as temp_dir:
         try:
             mp4_file = download_video(url, temp_dir)
             mp3_file = convert_to_mp3(mp4_file, temp_dir)
