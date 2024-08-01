@@ -31,7 +31,14 @@ MODULES = {
         'input_type': 'file',
         'file_type': 'svg',
         'returns_zip': True
-    }
+    },
+    'webm_to_mp4': {
+        'module': 'modules.webm_to_mp4',
+        'category': 'Video',
+        'input_type': 'file',
+        'file_type': 'mp4',
+        'returns_zip': False
+    },
 }
 
 @app.route('/api/modules', methods=['GET'])
