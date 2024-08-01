@@ -8,7 +8,9 @@ def convert_to_mp4(input_file, output_file):
     Convert WebM file to MP4 using ffmpeg.
     """
     command = f'ffmpeg -i "{input_file}" -c:v libx264 -c:a aac "{output_file}"'
-    subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if result.returncode != 0:
+        raise Exception(result.stderr.decode('utf-8'))
 
 def process(file):
     os.makedirs('/home/ubuntu/web-converter/temp/', exist_ok=True)
